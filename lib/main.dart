@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'Screens/loading.dart'; // Votre page de chargement
+import 'Screens/home.dart'; // Importer la page Home
+import 'Screens/admin.dart'; // Importer la page Admin
+import 'Screens/search.dart'; // Importer la page Search
+import 'Screens/Qrscanner.dart'; // Importer la page Scanner
+import 'Screens/ajouter.dart'; // Importer la page Ajouter
+import 'Screens/modifier.dart'; // Importer la page Modifier
+import 'Screens/supprimer.dart'; // Importer la page Supprimer
 
-import 'Screens/loading.dart';
 
 void main() {
   runApp(App());
@@ -11,7 +18,17 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Loading(),
+      initialRoute: '/', // Définir la route initiale
+      routes: {
+        '/': (context) => Loading(), // Route pour la page de chargement
+        '/home': (context) => Home(), // Route pour Home
+        '/admin': (context) => Admin(), // Route pour Admin
+        '/search': (context) => Search(), // Route pour Search
+        '/scanner': (context) => QrScanner(), // Route pour Scanner
+        '/ajouter': (context) => Ajouter(), // Route pour Ajouter
+        '/modifier': (context) => Modifier(), // Route pour Modifier
+        '/supprimer': (context) => Supprimer(), // Route pour Supprimer
+      },
     );
   }
 }
@@ -24,9 +41,9 @@ Row KLoginRegister(String text, String label, Function onTap) {
     children: [
       Text("Vous n'avez pas de compte?"),
       GestureDetector(
-        child: Text(label, style: TextStyle(color: Colors.blue)),
+        child: Text(label, style: TextStyle(color: Colors.green)),
         onTap: () => onTap(),
-      )
+      ),
     ],
   );
 }

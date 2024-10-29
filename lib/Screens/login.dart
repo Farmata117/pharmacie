@@ -20,14 +20,19 @@ class _LoginState extends State<Login> {
   bool loading = false;
 
   void loginUser() async {
+    setState(() {
+      loading = true;
+    });
+
     ApiResponse response = await login(txtEmail.text, txtPassword.text);
+
+    setState(() {
+      loading = false;
+    });
+
     if (response.error == null) {
       _saveAndRedirectToHome(response.data as User);
-    }
-     else {
-      setState(() {
-        loading = false;
-      });
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('${response.error}'),
       ));
@@ -46,62 +51,85 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Connexion'),
+        title: Text('Connexion', style: TextStyle(color: Colors.white)),
         centerTitle: true,
+        backgroundColor: Colors.green,
+        // Couleur de l'AppBar en vert
       ),
       body: Form(
         key: formkey,
         child: ListView(
           padding: EdgeInsets.all(32),
           children: [
+            Image.asset(
+              'assets/images/logo.png',
+              height: MediaQuery.of(context).size.height * 0.15,
+            ),
+            SizedBox(height: 20),
             TextFormField(
               keyboardType: TextInputType.emailAddress,
               controller: txtEmail,
               validator: (val) => val!.isEmpty ? 'Invalid email' : null,
-              decoration: KInputDecoration('Email'),
+              decoration: _inputDecoration(
+                  'Email'), // Utilisation de la méthode pour la décoration
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             TextFormField(
               controller: txtPassword,
               obscureText: true,
-              validator: (val) =>  val!.length  < 6 ? 'Required at least 6 chars' : null,
-                 
-              decoration: KInputDecoration('Mot de passe'),
+              validator: (val) =>
+                  val!.length < 6 ? 'Required at least 6 chars' : null,
+              decoration: _inputDecoration(
+                  'Mot de passe'), // Utilisation de la méthode pour la décoration
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             loading
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : KTextButton('Connexion', () {
-                    if (formkey.currentState!.validate()) {
-                      setState(() {
-                        loading = true;
-                      
-                      });
-                      loginUser();
-                      
-                    }
-                  }),
-            SizedBox(
-              height: 10,
+                ? Center(child: CircularProgressIndicator())
+                : ElevatedButton(
+                    onPressed: () {
+                      if (formkey.currentState!.validate()) {
+                        loginUser();
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          Colors.green, // Couleur verte pour le bouton
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                    ),
+                    child: Text('Connexion',
+                        style: TextStyle(color: Colors.white)),
+                  ),
+            SizedBox(height: 10),
+            KLoginRegister(
+              "Vous n'avez pas de compte?",
+              "S'inscrire ",
+              () {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => Register()),
+                    (route) => false);
+              },
             ),
-            KLoginRegister("Vous n'avez pas de compte?", "S'inscrire", () {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => Register()),
-                  (route) => false);
-            })
           ],
-
-          
         ),
       ),
     );
   }
+
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: TextStyle(color: Colors.green), // Couleur verte pour le label
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide:
+            BorderSide(color: Colors.green), // Couleur verte pour le contour
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide:
+            BorderSide(color: Colors.green), // Couleur verte pour le contour
+      ),
+    );
+  }
 }
-
-

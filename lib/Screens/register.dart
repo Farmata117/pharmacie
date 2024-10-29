@@ -26,8 +26,9 @@ class _RegisterState extends State<Register> {
       loading = true;
     });
 
-    ApiResponse response = await register(nameController.text, emailController.text, passwordController.text);
-    
+    ApiResponse response = await register(
+        nameController.text, emailController.text, passwordController.text);
+
     setState(() {
       loading = false;
     });
@@ -54,40 +55,41 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inscrire'),
+        title: Text('Inscrire', style: TextStyle(color: Colors.white)),
         centerTitle: true,
+        backgroundColor: Colors.green, // Couleur de l'AppBar en vert
       ),
       body: Form(
         key: formkey,
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
           children: [
+            Image.asset(
+              'assets/images/logo.png',
+              height: MediaQuery.of(context).size.height * 0.15,
+            ),
+            SizedBox(height: 20),
             TextFormField(
               controller: nameController,
               validator: (val) => val!.isEmpty ? 'Nom invalide' : null,
-              decoration: KInputDecoration('Nom'),
+              decoration: _inputDecoration('Nom'),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             TextFormField(
               controller: emailController,
-              validator: (val) => val!.isEmpty ? 'Adresse email invalide' : null,
-              decoration: KInputDecoration('Email'),
+              validator: (val) =>
+                  val!.isEmpty ? 'Adresse email invalide' : null,
+              decoration: _inputDecoration('Email'),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             TextFormField(
               controller: passwordController,
               obscureText: true,
               validator: (val) =>
                   val!.length < 6 ? 'Au moins 6 caractères requis' : null,
-              decoration: KInputDecoration('Mot de passe'),
+              decoration: _inputDecoration('Mot de passe'),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             TextFormField(
               controller: passwordConfirmController,
               obscureText: true,
@@ -97,32 +99,56 @@ class _RegisterState extends State<Register> {
                 }
                 return null;
               },
-              decoration: KInputDecoration('Confirmation du mot de passe'),
+              decoration: _inputDecoration('Confirmation du mot de passe'),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             loading
                 ? Center(
                     child: CircularProgressIndicator(),
                   )
-                : KTextButton('Inscrire', () {
-                    if (formkey.currentState!.validate()) {
-                      _RegisterUser();
-                    }
-                  }),
-            SizedBox(
-              height: 10,
-            ),
-            KLoginRegister(
-                "Vous avez déjà un compte sur cette plateforme ?", 'Se connecter',
-                () {
+                : ElevatedButton(
+                    onPressed: () {
+                      if (formkey.currentState!.validate()) {
+                        _RegisterUser();
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          Colors.green, // Couleur verte pour le bouton
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                    ),
+                    child: Text(
+                      'Inscrire',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+            SizedBox(height: 10),
+            KLoginRegister("Vous avez déjà un compte sur cette plateforme ?",
+                'Se connecter', () {
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (context) => Login()),
                   (route) => false);
             })
           ],
         ),
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: TextStyle(color: Colors.green), // Couleur verte pour le label
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide:
+            BorderSide(color: Colors.green), // Couleur verte pour le contour
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide:
+            BorderSide(color: Colors.green), // Couleur verte pour le contour
       ),
     );
   }

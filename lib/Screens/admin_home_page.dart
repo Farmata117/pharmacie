@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pharmacie/services/user_service.dart'; // Assurez-vous que ce chemin est correct
-import 'package:pharmacie/screens/login.dart'; // Assurez-vous que ce chemin est correct
+import 'package:pharmacie/services/user_service.dart'; 
+import 'package:pharmacie/screens/login.dart'; 
 
 class AdminHomePage extends StatefulWidget {
   @override
@@ -34,7 +34,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
           children: <Widget>[
             Text('Welcome, Admin!', style: TextStyle(fontSize: 24)),
             SizedBox(height: 20),
-            // Ajoutez Fonctionnalite pour administrateur,
+            // Ajoutez Fonctionnalité pour administrateur
           ],
         ),
       ),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pharmacie/screens/home.dart';
-import 'package:pharmacie/screens/admin_home_page.dart'; 
+import 'package:pharmacie/screens/admin_home_page.dart';
 import 'package:pharmacie/constant.dart';
 import 'package:pharmacie/models/api_response.dart';
 import 'package:pharmacie/services/user_service.dart';
 import 'package:pharmacie/screens/login.dart';
-import '../models/user.dart'; 
+import '../models/user.dart';
 
 class Loading extends StatefulWidget {
   @override
@@ -25,25 +25,33 @@ class _LoadingState extends State<Loading> {
     if (token.isEmpty) {
       // Si le token est vide, redirige vers la page de connexion
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => Login()), (route) => false);
+        MaterialPageRoute(builder: (context) => Login()),
+        (route) => false,
+      );
     } else {
       // Si le token existe, récupère les détails de l'utilisateur
       ApiResponse response = await getUserDetail();
       if (response.error == null) {
-        User user = response.data as User; 
-        if (user.role == 'admin') {
-          // Si l'utilisateur est un administrateur, redirige vers la page d'accueil admin
+        User user = response.data as User;
+        if (user.id == 9 && user.role == 'editor') {
+          // Si l'utilisateur est un administrateur spécifique, redirige vers la page d'accueil admin
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => AdminHomePage()), (route) => true);
+            MaterialPageRoute(builder: (context) => AdminHomePage()),
+            (route) => true,
+          );
         } else {
-          // Sinon, redirige vers la page d'accueil normale
+          // Redirection vers la page d'accueil normale pour les autres utilisateurs
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => Home()), (route) => true);
+            MaterialPageRoute(builder: (context) => Home()),
+            (route) => false,
+          );
         }
       } else if (response.error == unauthorized) {
         // Si l'erreur est d'autorisation, redirige vers la page de connexion
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => Login()), (route) => true);
+          MaterialPageRoute(builder: (context) => Login()),
+          (route) => false,
+        );
       } else {
         // Affiche un message d'erreur
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
