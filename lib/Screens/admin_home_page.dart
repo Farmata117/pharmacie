@@ -34,7 +34,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
           children: <Widget>[
             Text('Welcome, Admin!', style: TextStyle(fontSize: 24)),
             SizedBox(height: 20),
-            // Ajoutez ici les fonctionnalités pour les administrateurs
+            // Ajoutez Fonctionnalite pour administrateur,
           ],
         ),
       ),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pharmacie/screens/home.dart';
-import 'package:pharmacie/screens/admin_home_page.dart'; // Assurez-vous que cette page existe
+import 'package:pharmacie/screens/admin_home_page.dart'; 
 import 'package:pharmacie/constant.dart';
 import 'package:pharmacie/models/api_response.dart';
 import 'package:pharmacie/services/user_service.dart';
 import 'package:pharmacie/screens/login.dart';
-import '../models/user.dart'; // Assurez-vous que ce chemin est correct
+import '../models/user.dart'; 
 
 class Loading extends StatefulWidget {
   @override
@@ -30,20 +30,20 @@ class _LoadingState extends State<Loading> {
       // Si le token existe, récupère les détails de l'utilisateur
       ApiResponse response = await getUserDetail();
       if (response.error == null) {
-        User user = response.data as User; // Assurez-vous que la classe User est correctement définie
+        User user = response.data as User; 
         if (user.role == 'admin') {
           // Si l'utilisateur est un administrateur, redirige vers la page d'accueil admin
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => AdminHomePage()), (route) => false);
+              MaterialPageRoute(builder: (context) => AdminHomePage()), (route) => true);
         } else {
           // Sinon, redirige vers la page d'accueil normale
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => Home()), (route) => false);
+              MaterialPageRoute(builder: (context) => Home()), (route) => true);
         }
       } else if (response.error == unauthorized) {
         // Si l'erreur est d'autorisation, redirige vers la page de connexion
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => Login()), (route) => false);
+            MaterialPageRoute(builder: (context) => Login()), (route) => true);
       } else {
         // Affiche un message d'erreur
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
